@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Recorriendo nuestra Identidad Palotina</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#1B2A4A;
+    --ink-soft:#33456e;
+    --gold:#C9A227;
+    --gold-deep:#a9860f;
+    --paper:#F6EFE0;
+    --paper-dark:#EBDFC0;
+    --coral:#C1502E;
+    --green:#4C7A5D;
+    --line:#d8c99a;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--paper);
+    background-image:
+      radial-gradient(circle at 15% 8%, rgba(201,162,39,0.10), transparent 40%),
+      radial-gradient(circle at 90% 90%, rgba(27,42,74,0.06), transparent 45%);
+    color:var(--ink);
+    font-family:'Work Sans', sans-serif;
+    min-height:100vh;
+    padding-bottom:60px;
+  }
+  h1,h2,h3,.display{font-family:'Fraunces', serif;}
+  .wrap{max-width:560px; margin:0 auto; padding:28px 20px 0;}
+
+  /* Header */
+  header{text-align:center; margin-bottom:8px;}
+  .eyebrow{
+    font-size:12px; letter-spacing:.14em; text-transform:uppercase;
+    color:var(--gold-deep); font-weight:600; margin-bottom:6px;
+  }
+  h1{
+    font-size:clamp(28px,7vw,38px);
+    font-weight:700; line-height:1.05; margin:0 0 10px;
+    color:var(--ink);
+  }
+  .compass{width:56px; height:56px; margin:0 auto 14px;}
+  .lead{font-size:15px; line-height:1.55; color:var(--ink-soft); margin:0 auto 22px; max-width:440px;}
+
+  /* Start card */
+  .card{
+    background:#fff; border:1px solid var(--line); border-radius:14px;
+    padding:22px; box-shadow:0 3px 0 var(--line);
+  }
+  .btn{
+    display:inline-flex; align-items:center; justify-content:center; gap:8px;
+    width:100%; padding:14px 18px; border:none; border-radius:10px;
+    background:var(--coral); color:#fff; font-family:'Work Sans',sans-serif;
+    font-weight:600; font-size:16px; cursor:pointer; letter-spacing:.01em;
+    transition:transform .12s ease, box-shadow .12s ease;
+    box-shadow:0 3px 0 #8f3a20;
+  }
+  .btn:active{transform:translateY(2px); box-shadow:0 1px 0 #8f3a20;}
+  .btn:focus-visible{outline:3px solid var(--gold); outline-offset:2px;}
+  .btn.secondary{
+    background:#fff; color:var(--ink); border:1.5px solid var(--line); box-shadow:none;
+    font-size:14px; padding:10px 14px; width:auto;
+  }
+  .btn.secondary:focus-visible{outline:3px solid var(--gold); outline-offset:2px;}
+
+  /* Family code */
+  .code-box{
+    display:none; text-align:center; margin-top:18px;
+  }
+  .code-label{font-size:12px; text-transform:uppercase; letter-spacing:.12em; color:var(--ink-soft); margin-bottom:6px;}
+  .code-value{
+    font-family:'Fraunces', serif; font-weight:600; font-size:34px;
+    letter-spacing:.06em; color:var(--ink);
+    background:var(--paper-dark); border-radius:10px; padding:8px 18px;
+    display:inline-block;
+  }
+  .code-hint{font-size:12.5px; color:var(--ink-soft); margin-top:8px; line-height:1.5;}
+
+  /* Trail */
+  #trail{display:none; margin-top:30px;}
+  .trail-title{font-size:20px; font-weight:600; margin:0 0 4px;}
+  .trail-sub{font-size:13.5px; color:var(--ink-soft); margin:0 0 22px;}
+
+  .stations{list-style:none; margin:0; padding:0; position:relative;}
+  .stations::before{
+    content:"";
+    position:absolute; left:23px; top:14px; bottom:14px; width:2px;
+    background-image:linear-gradient(var(--line) 60%, transparent 0%);
+    background-size:2px 10px; background-repeat:repeat-y;
+  }
+  .station{
+    position:relative; padding-left:56px; margin-bottom:16px;
+  }
+  .pin{
+    position:absolute; left:0; top:0; width:46px; height:46px;
+    border-radius:50%; background:#fff; border:2px solid var(--ink);
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Fraunces', serif; font-weight:700; font-size:17px;
+    color:var(--ink); z-index:1;
+  }
+  .station.done .pin{background:var(--green); border-color:var(--green); color:#fff;}
+  .st-card{
+    background:#fff; border:1px solid var(--line); border-radius:12px;
+    padding:14px 16px; box-shadow:0 2px 0 var(--line);
+  }
+  .station.done .st-card{opacity:.6;}
+  .st-top{display:flex; align-items:center; gap:8px; margin-bottom:4px; flex-wrap:wrap;}
+  .st-type{
+    font-size:10.5px; text-transform:uppercase; letter-spacing:.08em; font-weight:700;
+    padding:2px 8px; border-radius:20px;
+  }
+  .st-type.pregunta{background:#e7edf7; color:var(--ink);}
+  .st-type.foto{background:#f6e4d9; color:var(--coral);}
+  .st-name{font-weight:700; font-size:16px; margin:0;}
+  .st-desc{font-size:13.5px; color:var(--ink-soft); margin:4px 0 12px; line-height:1.45;}
+  .st-actions{display:flex; gap:10px; align-items:center; flex-wrap:wrap;}
+  .st-link{
+    display:inline-flex; align-items:center; gap:6px;
+    background:var(--ink); color:#fff; text-decoration:none;
+    font-size:13.5px; font-weight:600; padding:9px 14px; border-radius:8px;
+  }
+  .st-check{
+    display:flex; align-items:center; gap:6px; font-size:13px; color:var(--ink-soft);
+    cursor:pointer; user-select:none;
+  }
+  .st-check input{width:16px; height:16px; accent-color:var(--green);}
+
+  .closing-note{
+    margin-top:24px; padding:16px; border-radius:12px;
+    background:var(--paper-dark); font-size:13.5px; color:var(--ink-soft); line-height:1.5;
+    text-align:center;
+  }
+  footer{text-align:center; font-size:11.5px; color:#9a8f6f; margin-top:34px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="eyebrow">Feria Académica</div>
+    <svg class="compass" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <circle cx="32" cy="32" r="27" stroke="#1B2A4A" stroke-width="2"/>
+      <circle cx="32" cy="32" r="2.5" fill="#C1502E"/>
+      <path d="M32 10 L37 32 L32 40 L27 32 Z" fill="#1B2A4A"/>
+      <path d="M32 54 L29 34 L32 30 L35 34 Z" fill="#C9A227"/>
+    </svg>
+    <h1>Recorriendo nuestra Identidad Palotina</h1>
+    <p class="lead">Un recorrido para toda la familia por rincones del colegio.
+      Cada familia sigue su propio orden de 8 estaciones — el tuyo lo vas a ver apenas empieces.</p>
+  </header>
+
+  <div class="card" id="startCard">
+    <button class="btn" id="startBtn">Comenzar mi recorrido</button>
+    <div class="code-box" id="codeBox">
+      <div class="code-label">Tu código de familia</div>
+      <div class="code-value" id="codeValue">----</div>
+      <p class="code-hint">Anotalo o hacé una captura. Vas a ingresarlo en cada formulario<br>(ya viene precargado si tocás los botones desde acá).</p>
+    </div>
+  </div>
+
+  <div id="trail">
+    <h2 class="trail-title">Tu recorrido</h2>
+    <p class="trail-sub">Visitá las estaciones en este orden. En cada una vas a responder un desafío o mostrar que estuviste ahí — la respuesta queda registrada al enviar el formulario.</p>
+    <ul class="stations" id="stationsList"></ul>
+    <div class="closing-note">Al enviar el formulario de tu <strong>última</strong> estación vas a ver un mensaje final. ¡Eso confirma que completaste el recorrido!</div>
+  </div>
+
+  <footer>Hecho para la feria académica · guardá esta página abierta durante el recorrido</footer>
+</div>
+
+<script>
+/* =========================================================================
+   CONFIGURACIÓN — editar esta lista con las 8 estaciones reales.
+   type: "pregunta" (Google Form normal) o "foto" (Form con carga de archivo
+   o tu formulario propio sin login).
+   formUrl: el link "Enviar" de cada Google Form (el que termina en /viewform).
+   entryId: OPCIONAL. Si querés precargar el código de familia en el form,
+   creá una pregunta corta "Código de familia" en el Form, usá
+   "Obtener enlace para completar previamente" en los tres puntos de Forms,
+   completá cualquier valor de prueba, copiá el link generado y buscá el
+   número que aparece después de "entry." — ese es el entryId. Si lo dejás
+   vacío, el link simplemente no precarga el código (la familia lo escribe
+   a mano en el form).
+
+   Para las estaciones type:"foto": formUrl debe ser la URL de tu app de
+   Apps Script (la que termina en /exec, generada al implementar Code.gs).
+   Puede ser LA MISMA URL en las dos estaciones de foto — el nombre de cada
+   estación y el código de familia se agregan solos como parámetros.
+========================================================================= */
+const STATIONS = [
+  { name:"Historia del colegio", type:"pregunta",
+    desc:"Stand de historia institucional, hall principal.",
+formUrl:"https://docs.google.com/forms/d/e/1FAIpQLSdkcsSPLITbIpkldaJ11X5EJXVbQ7EIeDodNXhCyWGzvDFC6Q/viewform", entryId:"621015134" },
+  { name:"Proyecto de ciencias", type:"pregunta",
+    desc:"Laboratorio, planta baja.",
+    formUrl:"https://docs.google.com/forms/d/e/1FAIpQLSeU2VY_Fv8Fc8iLz1hPPHUfLoTdjYLRq7G1aCKCqn9FILT_IQ/viewform", entryId:"55337587" },
+  { name:"Arte y creatividad", type:"foto",
+    desc:"Sala de arte — sacá una foto en el stand para validar tu visita.",
+    formUrl:"https://script.google.com/macros/s/AKfycbzb2CxZDBgsiDTFdlYmpTwr3QVkIazhvuJSxRgQpD7MTxCMKD7t02lEubzdx-ztXotU/exec", entryId:"" },
+  { name:"Deportes", type:"pregunta",
+    desc:"Patio cubierto.",
+    formUrl:"https://docs.google.com/forms/d/e/1FAIpQLSeGjQ2KOjh8Jx9M90FGJCq_3vyBvUwZDTd3zeX-ZcCBxiYwiQ/viewform", entryId:"1782807338" },
+  { name:"Idiomas", type:"pregunta",
+    desc:"Aula de inglés, primer piso.",
+    formUrl:"https://docs.google.com/forms/d/e/1FAIpQLSf0WuTfivbrxLbpa9oLr8fK82uTJUsf_M0xHOcaSbE7Bt2msQ/viewform", entryId:"1153860903" },
+  { name:"Tecnología", type:"pregunta",
+    desc:"Sala de informática.",
+    formUrl:"https://docs.google.com/forms/d/e/1FAIpQLSfoEMfLWdWiVte05ma1icnsfr1YvSTlhLlquZBeXrTCEu3jpA/viewform", entryId:"786181128" },
+  { name:"Música", type:"foto",
+    desc:"Sala de música — foto grupal frente a los instrumentos.",
+    formUrl:"https://script.google.com/macros/s/AKfycbzb2CxZDBgsiDTFdlYmpTwr3QVkIazhvuJSxRgQpD7MTxCMKD7t02lEubzdx-ztXotU/exec", entryId:"" },
+  { name:"Valores institucionales", type:"pregunta",
+    desc:"Mural de valores, entrada principal.",
+    formUrl:"https://docs.google.com/forms/d/e/1FAIpQLSfYDq90_ycsX_IrZpg4Yf3vur3BN1g5bVPu2Y6VFb-4BUAhOA/viewform", entryId:"1699338546" },
+];
+/* ========================================================================= */
+
+const STORAGE_KEY = "tesoro_v1";
+
+function randomCode(){
+  const letters = "ABCDEFGHJKLMNPQRSTUVWXYZ";
+  const digits = "0123456789";
+  const pick = s => s[Math.floor(Math.random()*s.length)];
+  return pick(letters)+pick(letters)+pick(digits)+pick(digits);
+}
+
+function shuffle(arr){
+  const a = arr.slice();
+  for(let i=a.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]] = [a[j],a[i]];
+  }
+  return a;
+}
+
+function buildLink(station, code){
+  // Estaciones tipo "foto": van a la app de Apps Script, que necesita
+  // el nombre de la estación y el código de familia como parámetros.
+  if(station.type === "foto"){
+    const sep = station.formUrl.includes("?") ? "&" : "?";
+    return `${station.formUrl}${sep}estacion=${encodeURIComponent(station.name)}&codigo=${encodeURIComponent(code)}`;
+  }
+  // Estaciones tipo "pregunta": Google Form, con precarga opcional del código.
+  if(!station.entryId) return station.formUrl;
+  const sep = station.formUrl.includes("?") ? "&" : "?";
+  return `${station.formUrl}${sep}entry.${station.entryId}=${encodeURIComponent(code)}`;
+}
+
+function loadOrCreateState(){
+  const raw = localStorage.getItem(STORAGE_KEY);
+  if(raw){
+    try{ return JSON.parse(raw); }catch(e){ /* fall through */ }
+  }
+  const code = randomCode();
+  const order = shuffle(STATIONS.map((_,i)=>i));
+  const state = { code, order, done:{} };
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  return state;
+}
+
+function saveState(state){
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+}
+
+function renderTrail(state){
+  const list = document.getElementById("stationsList");
+  list.innerHTML = "";
+  state.order.forEach((stationIndex, position)=>{
+    const st = STATIONS[stationIndex];
+    const isDone = !!state.done[stationIndex];
+    const li = document.createElement("li");
+    li.className = "station" + (isDone ? " done" : "");
+    li.innerHTML = `
+      <div class="pin">${position+1}</div>
+      <div class="st-card">
+        <div class="st-top">
+          <span class="st-type ${st.type}">${st.type === "foto" ? "Foto" : "Pregunta"}</span>
+        </div>
+        <p class="st-name">${st.name}</p>
+        <p class="st-desc">${st.desc}</p>
+        <div class="st-actions">
+          <a class="st-link" href="${buildLink(st, state.code)}" target="_blank" rel="noopener">Abrir desafío ↗</a>
+          <label class="st-check">
+            <input type="checkbox" data-idx="${stationIndex}" ${isDone ? "checked" : ""}>
+            Ya la hice
+          </label>
+        </div>
+      </div>
+    `;
+    list.appendChild(li);
+  });
+
+  list.querySelectorAll('input[type="checkbox"]').forEach(cb=>{
+    cb.addEventListener("change", (e)=>{
+      const idx = e.target.getAttribute("data-idx");
+      state.done[idx] = e.target.checked;
+      saveState(state);
+      renderTrail(state);
+    });
+  });
+}
+
+function start(){
+  const state = loadOrCreateState();
+  document.getElementById("codeValue").textContent = state.code;
+  document.getElementById("codeBox").style.display = "block";
+  document.getElementById("startBtn").textContent = "Ver mi recorrido de nuevo";
+  document.getElementById("trail").style.display = "block";
+  renderTrail(state);
+  document.getElementById("trail").scrollIntoView({behavior:"smooth", block:"start"});
+}
+
+document.getElementById("startBtn").addEventListener("click", start);
+
+/* Si la familia ya empezó antes (recargó la página), mostrar todo de una */
+if(localStorage.getItem(STORAGE_KEY)){
+  start();
+}
+</script>
+</body>
+</html>
