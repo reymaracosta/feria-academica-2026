@@ -156,9 +156,9 @@
       <path d="M32 10 L37 32 L32 40 L27 32 Z" fill="#1B2A4A"/>
       <path d="M32 54 L29 34 L32 30 L35 34 Z" fill="#C9A227"/>
     </svg>
-    <h1>La Búsqueda del Tesoro</h1>
-    <p class="lead">Un recorrido para toda la familia por los rincones del colegio.
-      Cada familia sigue su propio orden de 8 estaciones — el tuyo lo vas a ver apenas empieces.</p>
+    <h1>Recorriendo nuestra Identidad Palotina</h1>
+    <p class="lead">Un recorrido por rincones del colegio y lo que conocemos.
+      Cada familia tiene 8 retos para resolver juntos — Animense a participar.</p>
   </header>
 
   <div class="card" id="startCard">
@@ -166,18 +166,18 @@
     <div class="code-box" id="codeBox">
       <div class="code-label">Tu código de familia</div>
       <div class="code-value" id="codeValue">----</div>
-      <p class="code-hint">Anotalo o hacé una captura. Vas a ingresarlo en cada formulario<br>(ya viene precargado si tocás los botones desde acá).</p>
+      <p class="code-hint">Por favor no modificar<br>(ya viene precargado).</p>
     </div>
   </div>
 
   <div id="trail">
-    <h2 class="trail-title">Tu recorrido</h2>
-    <p class="trail-sub">Visitá las estaciones en este orden. En cada una vas a responder un desafío o mostrar que estuviste ahí — la respuesta queda registrada al enviar el formulario.</p>
+    <h2 class="trail-title">Consigna</h2>
+    <p class="trail-sub">Elijan la respuesta que consideren correcta y en las visitas cumplan con el reto solicitado. La respuesta queda registrada al enviar el formulario. Al terminar el desafío marca la casilla</p>
     <ul class="stations" id="stationsList"></ul>
-    <div class="closing-note">Al enviar el formulario de tu <strong>última</strong> estación vas a ver un mensaje final. ¡Eso confirma que completaste el recorrido!</div>
+    <div class="closing-note"> <strong>Gracias por llegar hasta acá </strong> </div>
   </div>
 
-  <footer>Hecho para la feria académica · guardá esta página abierta durante el recorrido</footer>
+  <footer>Hecho para la feria académica · Mantengan esta página abierta durante el recorrido. </footer>
 </div>
 
 <script>
@@ -200,29 +200,29 @@
    estación y el código de familia se agregan solos como parámetros.
 ========================================================================= */
 const STATIONS = [
-  { name:"Historia del colegio", type:"pregunta",
-    desc:"Stand de historia institucional, hall principal.",
+  { name:"Lugares del Colegio", type:"pregunta",
+    desc:"",
 formUrl:"https://docs.google.com/forms/d/e/1FAIpQLSdkcsSPLITbIpkldaJ11X5EJXVbQ7EIeDodNXhCyWGzvDFC6Q/viewform", entryId:"621015134" },
-  { name:"Proyecto de ciencias", type:"pregunta",
-    desc:"Laboratorio, planta baja.",
+  { name:"Palotinos en Uruguay", type:"pregunta",
+    desc:"",
     formUrl:"https://docs.google.com/forms/d/e/1FAIpQLSeU2VY_Fv8Fc8iLz1hPPHUfLoTdjYLRq7G1aCKCqn9FILT_IQ/viewform", entryId:"55337587" },
-  { name:"Arte y creatividad", type:"foto",
-    desc:"Sala de arte — sacá una foto en el stand para validar tu visita.",
+  { name:"Símbolos Palotinos ", type:"foto",
+    desc:"Sube una selfie con al menos un familiar con la Cruz Pallotina o la torre del campanario.",
     formUrl:"https://script.google.com/macros/s/AKfycbzb2CxZDBgsiDTFdlYmpTwr3QVkIazhvuJSxRgQpD7MTxCMKD7t02lEubzdx-ztXotU/exec", entryId:"" },
-  { name:"Deportes", type:"pregunta",
-    desc:"Patio cubierto.",
+  { name:"Historia Palotina", type:"pregunta",
+    desc:"",
     formUrl:"https://docs.google.com/forms/d/e/1FAIpQLSeGjQ2KOjh8Jx9M90FGJCq_3vyBvUwZDTd3zeX-ZcCBxiYwiQ/viewform", entryId:"1782807338" },
-  { name:"Idiomas", type:"pregunta",
-    desc:"Aula de inglés, primer piso.",
+  { name:"Lugares del Colegio", type:"pregunta",
+    desc:"",
     formUrl:"https://docs.google.com/forms/d/e/1FAIpQLSf0WuTfivbrxLbpa9oLr8fK82uTJUsf_M0xHOcaSbE7Bt2msQ/viewform", entryId:"1153860903" },
-  { name:"Tecnología", type:"pregunta",
-    desc:"Sala de informática.",
+  { name:"Descubrimientos", type:"pregunta",
+    desc:"",
     formUrl:"https://docs.google.com/forms/d/e/1FAIpQLSfoEMfLWdWiVte05ma1icnsfr1YvSTlhLlquZBeXrTCEu3jpA/viewform", entryId:"786181128" },
-  { name:"Música", type:"foto",
-    desc:"Sala de música — foto grupal frente a los instrumentos.",
+  { name:"Lugares del Colegio", type:"foto",
+    desc:"Tómense una selfie graciosa junto al molino de viento",
     formUrl:"https://script.google.com/macros/s/AKfycbzb2CxZDBgsiDTFdlYmpTwr3QVkIazhvuJSxRgQpD7MTxCMKD7t02lEubzdx-ztXotU/exec", entryId:"" },
-  { name:"Valores institucionales", type:"pregunta",
-    desc:"Mural de valores, entrada principal.",
+  { name:"Campus", type:"pregunta",
+    desc:"",
     formUrl:"https://docs.google.com/forms/d/e/1FAIpQLSfYDq90_ycsX_IrZpg4Yf3vur3BN1g5bVPu2Y6VFb-4BUAhOA/viewform", entryId:"1699338546" },
 ];
 /* ========================================================================= */
