@@ -129,6 +129,13 @@
     cursor:pointer; user-select:none;
   }
   .st-check input{width:16px; height:16px; accent-color:var(--green);}
+  .st-embed{
+    display:none; margin-top:12px; border-radius:10px; overflow:hidden;
+    border:1px solid var(--line);
+  }
+  .st-embed iframe{width:100%; height:680px; border:none; display:block;}
+  .st-fallback{font-size:12px; color:var(--ink-soft); margin-top:6px; text-align:center;}
+  .st-fallback a{color:var(--ink-soft);}
 
   .closing-note{
     margin-top:24px; padding:16px; border-radius:12px;
@@ -149,8 +156,8 @@
       <path d="M32 10 L37 32 L32 40 L27 32 Z" fill="#1B2A4A"/>
       <path d="M32 54 L29 34 L32 30 L35 34 Z" fill="#C9A227"/>
     </svg>
-    <h1>Recorriendo nuestra Identidad Palotina</h1>
-    <p class="lead">Un recorrido para toda la familia por rincones del colegio.
+    <h1>La Búsqueda del Tesoro</h1>
+    <p class="lead">Un recorrido para toda la familia por los rincones del colegio.
       Cada familia sigue su propio orden de 8 estaciones — el tuyo lo vas a ver apenas empieces.</p>
   </header>
 
@@ -238,7 +245,7 @@ function shuffle(arr){
   return a;
 }
 
-function buildLink(station, code){
+function buildLink(station, code, forEmbed){
   // Estaciones tipo "foto": van a la app de Apps Script, que necesita
   // el nombre de la estación y el código de familia como parámetros.
   if(station.type === "foto"){
@@ -246,9 +253,15 @@ function buildLink(station, code){
     return `${station.formUrl}${sep}estacion=${encodeURIComponent(station.name)}&codigo=${encodeURIComponent(code)}`;
   }
   // Estaciones tipo "pregunta": Google Form, con precarga opcional del código.
-  if(!station.entryId) return station.formUrl;
-  const sep = station.formUrl.includes("?") ? "&" : "?";
-  return `${station.formUrl}${sep}entry.${station.entryId}=${encodeURIComponent(code)}`;
+  let url = station.formUrl;
+  const params = [];
+  if(forEmbed) params.push("embedded=true");
+  if(station.entryId) params.push(`entry.${station.entryId}=${encodeURIComponent(code)}`);
+  if(params.length){
+    const sep = url.includes("?") ? "&" : "?";
+    url += sep + params.join("&");
+  }
+  return url;
 }
 
 function loadOrCreateState(){
@@ -275,6 +288,7 @@ function renderTrail(state){
     const isDone = !!state.done[stationIndex];
     const li = document.createElement("li");
     li.className = "station" + (isDone ? " done" : "");
+    const embedId = `embed-${stationIndex}`;
     li.innerHTML = `
       <div class="pin">${position+1}</div>
       <div class="st-card">
@@ -284,12 +298,13 @@ function renderTrail(state){
         <p class="st-name">${st.name}</p>
         <p class="st-desc">${st.desc}</p>
         <div class="st-actions">
-          <a class="st-link" href="${buildLink(st, state.code)}" target="_blank" rel="noopener">Abrir desafío ↗</a>
+          <button class="st-link toggle-btn" data-idx="${stationIndex}" type="button">Ver desafío</button>
           <label class="st-check">
             <input type="checkbox" data-idx="${stationIndex}" ${isDone ? "checked" : ""}>
             Ya la hice
           </label>
         </div>
+        <div class="st-embed" id="${embedId}"></div>
       </div>
     `;
     list.appendChild(li);
@@ -301,6 +316,31 @@ function renderTrail(state){
       state.done[idx] = e.target.checked;
       saveState(state);
       renderTrail(state);
+    });
+  });
+
+  list.querySelectorAll('.toggle-btn').forEach(btn=>{
+    btn.addEventListener("click", (e)=>{
+      const idx = e.target.getAttribute("data-idx");
+      const st = STATIONS[idx];
+      const box = document.getElementById(`embed-${idx}`);
+      const isOpen = box.style.display === "block";
+      if(isOpen){
+        box.style.display = "none";
+        e.target.textContent = "Ver desafío";
+        return;
+      }
+      // Carga diferida: recién arma el iframe la primera vez que se abre.
+      if(!box.dataset.loaded){
+        const src = buildLink(st, state.code, true);
+        const fallback = buildLink(st, state.code, false);
+        box.innerHTML = `<iframe src="${src}" loading="lazy"></iframe>
+          <p class="st-fallback">¿No carga? <a href="${fallback}" target="_blank" rel="noopener">Abrilo en una pestaña nueva</a></p>`;
+        box.dataset.loaded = "1";
+      }
+      box.style.display = "block";
+      e.target.textContent = "Ocultar";
+      box.scrollIntoView({behavior:"smooth", block:"nearest"});
     });
   });
 }
